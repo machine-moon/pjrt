@@ -1,0 +1,12 @@
+# fetched runtimes / build output - never committed
+*.so
+*.dylib
+*.metallib
+*.whl
+/cpu/
+/cuda/
+/rocm/
+/tpu/
+/xpu/
+/mps/
+/build/

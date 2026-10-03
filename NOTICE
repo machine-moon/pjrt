@@ -1,0 +1,10 @@
+pjrt
+Copyright (c) 2026 The pjrt Project Authors.
+
+This product makes use of the following third-party libraries:
+
+  OpenXLA (https://github.com/openxla/xla)
+  Copyright 2022-2026 The OpenXLA Authors
+  Licensed under the Apache License 2.0.
+
+  The PJRT C ABI headers in xla/ are redistributed verbatim from OpenXLA.

@@ -1,0 +1,48 @@
+name: headers
+
+on:
+  schedule: [{ cron: "23 5 * * *" }]   # 05:23 UTC daily
+  workflow_dispatch: {}
+
+concurrency: { group: pjrt-headers, cancel-in-progress: false }
+permissions: { contents: write, pull-requests: write }
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1   # v7.0.1
+
+      - name: check against upstream
+        id: check
+        continue-on-error: true
+        run: |
+          set -euo pipefail
+          bash scripts/sync_headers.sh --check
+
+      - name: open pull request
+        if: steps.check.outcome == 'failure'
+        env: { GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}" }
+        run: |
+          set -euo pipefail
+          bash scripts/sync_headers.sh
+          block=$(awk '/<!-- headers:begin -->/{f=1;next} /<!-- headers:end -->/{f=0} f' README.md)
+          minor=$(echo "$block" | grep -m1 -oE '0\.[0-9]+')
+          ref=$(echo "$block" | grep -m1 -oE '[0-9a-f]{40}')
+          branch="headers-${ref##*@}"; branch=${branch:0:24}
+          if [ -n "$(gh pr list --head "$branch" --json number -q '.[].number')" ]; then
+            echo "PR for $branch already open"
+            exit 0
+          fi
+          git config user.name Tarek Ibrahim
+          git config user.email t1br4h1m@gmail.com
+          git checkout -b "$branch"
+          git add xla README.md
+          git commit -m "headers: $(date -u +%F) pjrt $minor $ref"
+          git push --force origin "HEAD:$branch"
+          if ! gh pr create --base master --head "$branch" \
+            --title "headers: $(date -u +%F) pjrt $minor $ref" \
+            --body "Automated PJRT header sync from $ref. Merge to update \`xla/\`."; then
+            echo "::error::could not open the PR. Enable: Settings -> Actions -> General -> Workflow permissions -> 'Allow GitHub Actions to create and approve pull requests'." >&2
+            exit 1
+          fi
