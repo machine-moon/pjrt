@@ -3,7 +3,7 @@
 ## Headers
 
 <!-- headers:begin -->
-PJRT C ABI headers from [OpenXLA](https://github.com/openxla/xla) at [`91888df6`](https://github.com/openxla/xla/commit/91888df6ce85102c30220e41d952065925e10886) — API version `0.115`.
+PJRT C ABI headers from [OpenXLA](https://github.com/openxla/xla) at [`7caecda6`](https://github.com/openxla/xla/commit/7caecda6be7bbbc49a3e907a2a9704e9a6e820b4) — API version `0.116`.
 <!-- headers:end -->
 
 PJRT runtime libraries together with the exact PJRT C ABI headers, taken from
