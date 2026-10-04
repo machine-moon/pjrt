@@ -4,7 +4,7 @@ PJRT runtime libraries, each shipped with the exact C ABI headers it was built
 against. Headers are vendored in-tree; the libraries are fetched on demand.
 
 <!-- headers:begin -->
-PJRT C ABI headers from [OpenXLA](https://github.com/openxla/xla) at [`91888df6`](https://github.com/openxla/xla/commit/91888df6ce85102c30220e41d952065925e10886) — API version `0.115`.
+PJRT C ABI headers from [OpenXLA](https://github.com/openxla/xla) at [`7ae4b387`](https://github.com/openxla/xla/commit/7ae4b3879d59135c68aaeab47967d125667d36e8) — API version `0.116`.
 <!-- headers:end -->
 
 The repository holds `xla/` (headers), `fetch.sh`, `pjrt.cmake`, and the
