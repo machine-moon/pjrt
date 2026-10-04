@@ -12,6 +12,7 @@
 # Outputs (write mode):
 #   xla/pjrt/c/**, xla/pjrt/extensions/**, xla/backends/profiler/plugin/**
 #   README.md   the line between the "headers" markers
+#   VERSION     machine-readable provenance (XLA commit + PJRT API version)
 #
 # Everything else under xla/ (e.g. xla/pjrt/pjrt_loader.h) is never touched.
 #
@@ -105,6 +106,9 @@ short=${commit:0:8}
 line_file=$work/headers-line
 echo "PJRT C ABI headers from [OpenXLA](https://github.com/openxla/xla) at [\`$short\`](https://github.com/openxla/xla/commit/$commit) — API version \`0.$minor\`." > "$line_file"
 
+version_file=$work/VERSION
+printf 'openxla/xla %s\npjrt api 0.%s\n' "$commit" "$minor" > "$version_file"
+
 # print the README lines between the markers
 readme_block() {
     awk -v begin="$MARK_BEGIN" -v end="$MARK_END" '
@@ -154,6 +158,11 @@ if [ "$mode" = check ]; then
         diff <(readme_block) "$line_file" | sed 's/^/    /'
         drift=1
     fi
+    if ! diff VERSION "$version_file" >/dev/null 2>&1; then
+        echo "drift: VERSION"
+        diff VERSION "$version_file" | sed 's/^/    /'
+        drift=1
+    fi
     [ "$drift" = 0 ] || exit 1
     echo "up to date: pjrt 0.$minor (openxla/xla@$short)"
     exit 0
@@ -165,4 +174,5 @@ done
 mkdir -p xla
 cp -r "$export_dir/." xla/
 readme_set "$line_file"
-echo "wrote xla/ and $README: pjrt 0.$minor (openxla/xla@$short)"
+cp "$version_file" VERSION
+echo "wrote xla/, $README and VERSION: pjrt 0.$minor (openxla/xla@$short)"

@@ -61,12 +61,16 @@ usage() {
     echo '  -f / --force  re-download files that already exist.'
 }
 
-# download <family> <variant> <arch> <library> into <family>[/<variant>]/<arch>/
+# download <family> <variant> <arch> <library> into devices/<family>[/<variant>]/<arch>/.
+# The published asset name is family[/variant]/arch/library (no devices/ prefix), so
+# reorganising the local tree never changes the release asset names.
 get() {
-    local family=$1 variant=$2 arch=$3 library=$4 path
-    path=$family/$arch/$library
+    local family=$1 variant=$2 arch=$3 library=$4 path asset
+    path=devices/$family/$arch/$library
+    asset=$family/$arch/$library
     if [ -n "$variant" ]; then
-        path=$family/$variant/$arch/$library
+        path=devices/$family/$variant/$arch/$library
+        asset=$family/$variant/$arch/$library
     fi
     if [ -e "$path" ] && [ -z "$force" ]; then
         echo "have  $path"
@@ -74,7 +78,7 @@ get() {
         echo "get   $path"
         # download to .part, then move: a failed/partial download never becomes
         # a file that later runs treat as present.
-        curl -fL --retry 3 --create-dirs -o "$path.part" "$base/${path//\//__}"
+        curl -fL --retry 3 --create-dirs -o "$path.part" "$base/${asset//\//__}"
         mv "$path.part" "$path"
     fi
 }

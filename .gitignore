@@ -3,10 +3,5 @@
 *.dylib
 *.metallib
 *.whl
-/cpu/
-/cuda/
-/rocm/
-/tpu/
-/xpu/
-/mps/
+/devices/
 /build/

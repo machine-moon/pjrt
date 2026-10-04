@@ -7,8 +7,9 @@ against. Headers are vendored in-tree; the libraries are fetched on demand.
 PJRT C ABI headers from [OpenXLA](https://github.com/openxla/xla) at [`91888df6`](https://github.com/openxla/xla/commit/91888df6ce85102c30220e41d952065925e10886) — API version `0.115`.
 <!-- headers:end -->
 
-The repository holds `xla/` (headers), `fetch.sh`, `pjrt.cmake`, and the
-maintainer `scripts/`.
+The repository holds `xla/` (headers), `devices/` (fetched runtimes), `fetch.sh`,
+`pjrt.cmake`, `VERSION` (machine-readable provenance, kept in sync with the
+headers line by `scripts/sync_headers.sh`), and the maintainer `scripts/`.
 
 ## Fetch
 
@@ -20,13 +21,13 @@ maintainer `scripts/`.
 ./fetch.sh mps        # Apple GPU (arm64)
 ```
 
-Libraries land beside `xla/`:
+Libraries land under `devices/`:
 
 ```
-cpu/{x86_64,aarch64}/
-cuda/{11/x86_64, 12/{x86_64,aarch64}, 13/{x86_64,aarch64}}/
-rocm/{6,7,10}/x86_64/
-xpu/x86_64/   tpu/x86_64/   mps/arm64/
+devices/cpu/{x86_64,aarch64}/
+devices/cuda/{11/x86_64, 12/{x86_64,aarch64}, 13/{x86_64,aarch64}}/
+devices/rocm/{6,7,10}/x86_64/
+devices/xpu/x86_64/   devices/tpu/x86_64/   devices/mps/arm64/
 ```
 
 GitHub publishes a SHA256 digest for every release asset.

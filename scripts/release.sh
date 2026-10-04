@@ -72,11 +72,13 @@ if gh release view "$tag" >/dev/null 2>&1; then
 fi
 
 # --- 4. stage assets -------------------------------------------------------
-# Asset names are flat: cuda/12/x86_64/x.so -> cuda__12__x86_64__x.so
+# Asset names are flat and independent of the local tree: the `devices/` prefix is
+# stripped so cuda/12/x86_64/x.so -> cuda__12__x86_64__x.so either way.
 stage=$(mktemp -d)
 trap 'rm -rf "$stage"' EXIT
 while IFS= read -r -d '' file; do
     relative=${file#build/}
+    relative=${relative#devices/}
     encoded=${relative//\//__}
     cp "$file" "$stage/$encoded"
 done < <(find build -type f -print0)

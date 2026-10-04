@@ -6,8 +6,8 @@
 #   scripts/collect.sh [OUT]     OUT defaults to build/
 #
 # For each package in SPEC it downloads the newest release wheel and extracts
-# its shared library into OUT/{family}/{variant}/{arch}/. Files already present
-# are skipped, so re-running is cheap and idempotent.
+# its shared library into OUT/devices/{family}/{variant}/{arch}/. Files already
+# present are skipped, so re-running is cheap and idempotent.
 #
 # Requirements: curl, unzip.
 set -euo pipefail
@@ -89,7 +89,7 @@ main() {
         wheels=$(latest_wheels "$package") || exit 1
         while read -r url; do
             arch=$(arch_of "${url##*/}") || continue
-            dir=$out/$family${variant:+/$variant}/$arch
+            dir=$out/devices/$family${variant:+/$variant}/$arch
 
             # skip when every library is already present
             missing=0
