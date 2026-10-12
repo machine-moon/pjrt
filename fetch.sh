@@ -19,6 +19,7 @@
 #       is taken from uname -m. A device command also fetches the CPU plugin
 #       for the same arch. -f / --force re-downloads existing files.
 set -euo pipefail
+cd -- "$(dirname -- "$0")"
 
 base=${PJRT_BASE:-https://github.com/machine-moon/pjrt/releases/latest/download}
 
